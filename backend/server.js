@@ -11,14 +11,17 @@ const Message = require("./models/Message");
 const User = require("./models/User"); 
 
 const app = express();
-app.use(cors());
+
+// UPDATED: Open CORS for all origins to ensure Vercel can communicate
+app.use(cors({ origin: "*" })); 
 app.use(express.json()); 
 
 const server = http.createServer(app);
 
+// UPDATED: Changed origin from "localhost" to "*" so it works on the live web
 const io = new Server(server, {
   cors: {
-    origin: "http://localhost:5173",
+    origin: "*", 
     methods: ["GET", "POST"],
   },
 });
@@ -90,7 +93,6 @@ io.on("connection", (socket) => {
     console.log(`User ID: ${socket.id} joined room: ${room}`);
   });
 
-  // NEW: Typing Indicators
   socket.on("typing", (data) => {
     socket.to(data.room).emit("user_typing", data.author);
   });
