@@ -1,12 +1,16 @@
+// frontend/src/App.jsx
 import "./App.css";
 import { useState, useEffect } from "react";
-import Auth from "./Auth";
+import Login from "./Login";
+import Register from "./Register";
 import Chat from "./Chat";
-import "./App.css";
 
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [username, setUsername] = useState("");
+  
+  // NEW: State to track which auth screen to show
+  const [showLogin, setShowLogin] = useState(true); 
 
   // When the app loads, check if the user already has a token saved in their browser
   useEffect(() => {
@@ -20,12 +24,23 @@ function App() {
   }, []);
 
   return (
-    <div className="app-container">
-      {/* Conditional Rendering: If logged in, show Chat. If not, show Auth. */}
+    <div className="app-container"> 
+      {/* 1. If logged in, show the Chat room */}
       {isLoggedIn ? (
         <Chat username={username} setIsLoggedIn={setIsLoggedIn} />
       ) : (
-        <Auth setIsLoggedIn={setIsLoggedIn} setUsername={setUsername} />
+        /* 2. If NOT logged in, check which Auth page to show */
+        showLogin ? (
+          <Login 
+            setIsLoggedIn={setIsLoggedIn} 
+            setUsername={setUsername} 
+            showRegisterPage={() => setShowLogin(false)} 
+          />
+        ) : (
+          <Register 
+            showLoginPage={() => setShowLogin(true)} 
+          />
+        )
       )}
     </div>
   );

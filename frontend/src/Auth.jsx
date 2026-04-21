@@ -14,7 +14,7 @@ function Auth({ setIsLoggedIn, setUsername }) {
     setError(""); // Clear old errors
 
     const endpoint = isLoginMode ? "/api/login" : "/api/register";
-
+  
     try {
       // 🌐 UPDATED: Pointing to the live Render URL
       const response = await axios.post(`https://mern-chat-backend-8wf3.onrender.com${endpoint}`, {
